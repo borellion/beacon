@@ -1,6 +1,6 @@
 # Beacon
 
-A JavaScript library for registering spatial web experiences with [Relay](https://github.com/zestyxyz/relay) servers. Part of the Distributed Spatial Internet Graph (DSIG).
+A JavaScript library for registering spatial web experiences with [Relay](https://github.com/borellion/relay) servers. Part of the Distributed Spatial Internet Graph (DSIG).
 
 ## What is a Beacon?
 
@@ -33,7 +33,7 @@ import Beacon from "https://cdn.jsdelivr.net/npm/@zestyxyz/beacon/index.js";
 ```js
 import Beacon from '@zestyxyz/beacon';
 
-const beacon = new Beacon("https://relay.zesty.xyz");
+const beacon = new Beacon("https://relay.borellion.com");
 await beacon.signal();
 ```
 
@@ -58,7 +58,7 @@ The beacon automatically reads metadata from your page's `<head>`. Add these met
   <meta name="rating" content="adult">
 
   <!-- Optional: Owner verification (see below) -->
-  <meta name="zesty-verify" content="your-verification-code">
+  <meta name="borellion-verify" content="your-verification-code">
 </head>
 ```
 
@@ -78,7 +78,7 @@ The beacon automatically reads metadata from your page's `<head>`. Add these met
 You can override auto-detected values by passing options to the constructor:
 
 ```js
-const beacon = new Beacon("https://relay.zesty.xyz", {
+const beacon = new Beacon("https://relay.borellion.com", {
   name: "Custom World Name",
   description: "Custom description",
   url: "https://custom-url.example.com",
@@ -137,11 +137,11 @@ This enables real-time "users online" tracking on the relay.
 
 After your world is indexed, you can verify ownership to edit its details on the relay:
 
-1. Visit your world's edit page on the relay (e.g., `https://relay.zesty.xyz/world/my-world/edit`)
+1. Visit your world's edit page on the relay (e.g., `https://relay.borellion.com/world/my-world/edit`)
 2. Click "Get Verification Code" to receive a unique code
 3. Add the verification meta tag to your site's `<head>`:
    ```html
-   <meta name="zesty-verify" content="your-code-here">
+   <meta name="borellion-verify" content="your-code-here">
    ```
 4. Click "Verify Ownership" on the relay
 5. Once verified, you can edit: name, description, image URL, tags, and adult flag
@@ -174,7 +174,7 @@ For A-Frame scenes without an `og:image` meta tag, the beacon will automatically
   <script type="module">
     import Beacon from "https://cdn.jsdelivr.net/npm/@zestyxyz/beacon/index.js";
 
-    const beacon = new Beacon("https://relay.zesty.xyz");
+    const beacon = new Beacon("https://relay.borellion.com");
     await beacon.signal();
 
     console.log("World registered with relay!");
@@ -185,8 +185,8 @@ For A-Frame scenes without an `og:image` meta tag, the beacon will automatically
 
 ## Related
 
-- [Relay](https://github.com/zestyxyz/relay) - The discovery server that indexes worlds
-- [DSIG Documentation](https://docs.zesty.xyz/graph/overview) - Learn more about the Distributed Spatial Internet Graph
+- [Relay](https://github.com/borellion/relay) - The discovery server that indexes worlds
+- [DSIG Documentation](https://docs.borellion.com/graph/overview) - Learn more about the Distributed Spatial Internet Graph
 
 ## License
 
