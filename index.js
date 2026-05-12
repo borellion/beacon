@@ -321,8 +321,11 @@ export default class Beacon {
       try {
         this.topLevelDocument = window.top.document;
       } catch {
-        console.error("Cannot get URL of cross-origin frame, aborting.");
-        return;
+        if (!this.specifiedUrl) {
+          console.error("Cannot get URL of cross-origin frame, aborting. Pass a url override to the Beacon constructor to fix this: new Beacon(relay, { url: 'https://your-world-url.com' })");
+          return;
+        }
+        // specifiedUrl is set, so we can proceed without the top-level document
       }
     }
     const url = this.getUrl();
