@@ -72,7 +72,7 @@ export default class Beacon {
     }
 
     this.sessionId = generateRandomUUID();
-    console.log("Zesty Beacon v0.0.18");
+    console.log("Borellion Beacon v0.0.19");
   }
 
   /**
