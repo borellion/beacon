@@ -72,7 +72,7 @@ export default class Beacon {
     }
 
     this.sessionId = generateRandomUUID();
-    console.log("Borellion Beacon v0.0.19");
+    console.log("Borellion Beacon v0.0.20");
   }
 
   /**
