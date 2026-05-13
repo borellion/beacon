@@ -1,12 +1,12 @@
 {
-  "name": "@zestyxyz/beacon",
+  "name": "@borellion/beacon",
   "version": "0.0.18",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Zesty <elijah@zesty.xyz>",
+  "author": "Borellion",
   "license": "MIT",
   "description": "Connect your world to the open web",
   "type": "module"
