@@ -15,23 +15,23 @@ Beacons allow 3D/spatial web applications to announce themselves to Relay discov
 ### NPM
 
 ```bash
-npm install @zestyxyz/beacon
+npm install @borellion/beacon
 ```
 
 ```js
-import Beacon from '@zestyxyz/beacon';
+import Beacon from '@borellion/beacon';
 ```
 
 ### CDN
 
 ```js
-import Beacon from "https://cdn.jsdelivr.net/npm/@zestyxyz/beacon/index.js";
+import Beacon from "https://cdn.jsdelivr.net/npm/@borellion/beacon/index.js";
 ```
 
 ## Quick Start
 
 ```js
-import Beacon from '@zestyxyz/beacon';
+import Beacon from '@borellion/beacon';
 
 const beacon = new Beacon("https://relay.borellion.com");
 await beacon.signal();
@@ -172,7 +172,7 @@ For A-Frame scenes without an `og:image` meta tag, the beacon will automatically
   <!-- Your 3D content here -->
 
   <script type="module">
-    import Beacon from "https://cdn.jsdelivr.net/npm/@zestyxyz/beacon/index.js";
+    import Beacon from "https://cdn.jsdelivr.net/npm/@borellion/beacon/index.js";
 
     const beacon = new Beacon("https://relay.borellion.com");
     await beacon.signal();
