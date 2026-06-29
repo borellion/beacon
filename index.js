@@ -5,6 +5,7 @@
  * @property {string} [url] - The canonical URL of the app
  * @property {string} [image] - The preview image of the app
  * @property {string} [tags] - The tags of the app
+ * @property {string} [contentType] - The content type ('world' or 'page'). Auto-detected if not specified.
  * @property {boolean} [stripQueryParams] - Whether to strip query parameters
  */
 
@@ -39,6 +40,8 @@ export default class Beacon {
   specifiedImage;
   /** @type {string} The tags for the app, if specified. Overrides page checks. */
   specifiedTags;
+  /** @type {string} The content type, if specified. Overrides auto-detection. */
+  specifiedContentType;
   /** @type {boolean} Whether the beacon is currently in a browser context */
   browserContext = 'document' in globalThis;
   /** @type {Document} The top-level HTML document, if we detect we are running in an iframe. */
@@ -68,6 +71,7 @@ export default class Beacon {
       this.specifiedUrl = override.url ?? null;
       this.specifiedImage = override.image ?? null;
       this.specifiedTags = override.tags ?? null;
+      this.specifiedContentType = override.contentType ?? null;
       this.stripQueryParams = override.stripQueryParams ?? true;
     }
 
@@ -300,6 +304,26 @@ export default class Beacon {
   }
 
   /**
+   * Detects whether this page is a 3D world or a regular page.
+   * Checks for A-Frame, common 3D libraries, WebXR + canvas, and a meta tag override.
+   * @returns {string} 'world' or 'page'
+   */
+  getContentType() {
+    if (this.specifiedContentType) return this.specifiedContentType;
+
+    const document = this.topLevelDocument ?? window.document;
+
+    const meta = document.head.querySelector('meta[name="borellion-type"]');
+    if (meta) return meta.getAttribute('content');
+
+    if (document.querySelector('a-scene')) return 'world';
+    if (window.THREE || window.BABYLON || window.PlayCanvas) return 'world';
+    if (navigator.xr && document.querySelector('canvas')) return 'world';
+
+    return 'page';
+  }
+
+  /**
    * Sends a signal to the relay with the app's current metadata
    * @returns {Promise<void>}
    */
@@ -322,10 +346,11 @@ export default class Beacon {
         this.topLevelDocument = window.top.document;
       } catch {
         if (!this.specifiedUrl) {
-          console.error("Cannot get URL of cross-origin frame, aborting. Pass a url override to the Beacon constructor to fix this: new Beacon(relay, { url: 'https://your-world-url.com' })");
-          return;
+          const fallback = document.referrer || window.location.href;
+          console.warn(`Cannot get URL of cross-origin frame. Falling back to: ${fallback}. Pass a url override to the Beacon constructor for more control: new Beacon(relay, { url: 'https://your-world-url.com' })`);
+          this.specifiedUrl = fallback;
         }
-        // specifiedUrl is set, so we can proceed without the top-level document
+        // specifiedUrl is set (either manually or via fallback), so we can proceed without the top-level document
       }
     }
     const url = this.getUrl();
@@ -333,6 +358,7 @@ export default class Beacon {
     const description = this.getDescription();
     const adult = this.isAdult();
     const tags = this.getTags();
+    const contentType = this.getContentType();
     if (!url || !name || !description) {
       console.error("Missing required metadata! Check your <meta> tags for the following attributes: data-canonical-url, name=application-name, name=description, og:image");
       return;
@@ -344,6 +370,7 @@ export default class Beacon {
       active: true,
       adult,
       tags,
+      contentType,
     };
     const sendBeacon = async () => {
       const freshImage = await this.getImage();
