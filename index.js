@@ -336,6 +336,16 @@ export default class Beacon {
       console.error("You must specify a relay URL for the beacon to connect to!");
       return;
     }
+    // Guard against multiple Beacon instances signalling on the same page --
+    // e.g. a host page bundling one copy of this SDK while also dynamically
+    // loading another (possibly different-version) copy. Only the first
+    // signal() call actually registers and starts the heartbeat; the rest
+    // are no-ops.
+    if (window.__borellionBeaconSignaled) {
+      console.warn("A Borellion Beacon has already signalled on this page; skipping duplicate signal().");
+      return;
+    }
+    window.__borellionBeaconSignaled = true;
     if (document.readyState !== 'complete') {
       await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
     }
